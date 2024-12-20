@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only ./src",
     "build": "tsc"
-
   },
   "keywords": [],
   "author": "",
@@ -20,6 +19,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@prisma/client": "^6.1.0",
     "cors": "^2.8.5",
     "express": "^4.21.2"
   }

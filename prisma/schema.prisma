@@ -6,3 +6,76 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id       String @id @default(uuid()) @db.Uuid
+  name     String @db.VarChar(60)
+  email    String @unique @db.VarChar(100)
+  password String @db.VarChar(255)
+  username String @unique @db.VarChar(20)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  following Follower[] @relation("FollowerUser") // Quem este usuário segue
+  followers Follower[] // Quem segue este usuário
+  tweet     Tweet[]
+  like      Like[]
+
+  @@map("users")
+}
+
+model Follower {
+  userId     String @map("user_id") @db.Uuid
+  followerId String @map("follower_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     User @relation(fields: [userId], references: [id])
+  follower User @relation("FollowerUser", fields: [followerId], references: [id])
+
+  @@id([userId, followerId])
+  @@map("followers")
+}
+
+enum Type {
+  Tweet
+  Reply
+}
+
+model Tweet {
+  id      String @id @default(uuid()) @db.Uuid
+  content String @db.VarChar(2000)
+  type    Type   @default(Tweet)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tweetOriginalId String  @map("tweet_original_id") @db.Uuid
+  tweetOrig       Tweet   @relation("tweetOri", fields: [tweetOriginalId], references: [id])
+  replies         Tweet[] @relation("tweetOri")
+
+  userId String @map("user_id") @db.Uuid
+
+  user User   @relation(fields: [userId], references: [id])
+  Like Like[]
+
+  tweetId String? @db.Uuid
+
+  @@map("tweets")
+}
+
+model Like {
+  tweetId String @map("tweet_id") @db.Uuid
+  userId  String @map("user_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tweet Tweet @relation(fields: [tweetId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@id([tweetId, userId])
+  @@map("likes")
+}
