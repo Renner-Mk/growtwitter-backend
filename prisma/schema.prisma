@@ -61,17 +61,12 @@ model Tweet {
   user User   @relation(fields: [userId], references: [id])
   Like Like[]
 
-  tweetId String? @db.Uuid
-
   @@map("tweets")
 }
 
 model Like {
   tweetId String @map("tweet_id") @db.Uuid
   userId  String @map("user_id") @db.Uuid
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
 
   tweet Tweet @relation(fields: [tweetId], references: [id])
   user  User  @relation(fields: [userId], references: [id])
