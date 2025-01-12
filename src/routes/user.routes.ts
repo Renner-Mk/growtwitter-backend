@@ -9,9 +9,9 @@ const userController = new UserController()
 
 
 router.post('/user', userController.create)
-router.get('/user', userController.index)
-router.get('/user/:id', userController.show)
-router.put('/user/:id', validateToken, userController.update)
-router.delete('/user/:id', validateToken, userController.delete)
+router.get('/user/:userId', validateToken, userController.index)
+router.get('/user/:userId', validateToken, userController.show)
+router.put('/user/:userId', validateToken, userController.update)
+router.delete('/user/:userId', validateToken, userController.delete)
 
 export default router

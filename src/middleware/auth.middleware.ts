@@ -4,7 +4,7 @@ import { repository } from "../database/prisma.connection";
 export async function validateToken(req: Request, res: Response, next: NextFunction){
     try {
         const { authorization } = req.headers
-        const { id } = req.params
+        const { userId } = req.params
 
         if(!authorization){
             return res.status(401).json({
@@ -14,7 +14,7 @@ export async function validateToken(req: Request, res: Response, next: NextFunct
             })
         }
 
-        if (!id) {
+        if (!userId) {
             return res.status(400).json({
                 success: false,
                 code: res.statusCode,
@@ -23,7 +23,7 @@ export async function validateToken(req: Request, res: Response, next: NextFunct
         }
 
         const user = await repository.user.findUnique({
-            where: { id }
+            where: { id: userId }
         })
         
 

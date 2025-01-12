@@ -38,10 +38,10 @@ export class UserController{
 
     public async show(req: Request, res: Response){
         try{
-            const { id } = req.params
+            const { userId } = req.params
 
             const student = await repository.user.findUnique({
-                where: {id},
+                where: {id: userId},
                 select:{
                     id: true,
                     name: true,
@@ -140,7 +140,7 @@ export class UserController{
 
     public async update(req: Request, res: Response){
         try{
-            const { id } = req.params
+            const { userId } = req.params
             const { name, email, password, username} = req.body
 
             if(!name || !email || !password || !username){
@@ -152,7 +152,7 @@ export class UserController{
             }
 
             const updateUser = await repository.user.update({
-                where: {id},
+                where: {id: userId},
                 data: {
                     name,
                     email,

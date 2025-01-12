@@ -3,6 +3,7 @@ import cors from "cors";
 import * as dotenv from 'dotenv';
 import userRouter from "./routes/user.routes";
 import authRouter from "./routes/auth.routes";
+import tweetRouter from "./routes/tweet.routes";
 
 const app = express();
 
@@ -13,6 +14,7 @@ dotenv.config()
 
 app.use(authRouter)
 app.use(userRouter) //rotas
+app.use(tweetRouter)
 
 app.listen(process.env.PORT, () => {
     console.log("🚀 Server ready at: http://localhost:3000");
