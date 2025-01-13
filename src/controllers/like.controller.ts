@@ -6,24 +6,6 @@ export class LikeController{
         try {
             const { userId, tweetId } = req.params
 
-            if(!tweetId){
-                return res.status(400).json({
-                    success: false,
-                    code: res.statusCode,
-                    message: 'Forneça um id de tweet para curtir',
-                })
-            }
-
-            const tweet = await repository.tweet.findUnique({where: {id: tweetId}})
-
-            if(!tweet){
-                return res.status(404).json({
-                    success: false,
-                    code: res.statusCode,
-                    message: 'Tweet não encontrado verifique e tente novamente',
-                })
-            }
-
             const isFollowing = await repository.like.findFirst({
                 where: {
                     userId,
@@ -98,24 +80,6 @@ export class LikeController{
     public async dislike(req: Request, res: Response){
         try {
             const { userId, tweetId } = req.params
-
-            if(!tweetId){
-                return res.status(400).json({
-                    success: false,
-                    code: res.statusCode,
-                    message: 'Forneça um nome de usuario para seguir',
-                })
-            }
-
-            const like = await repository.like.findFirst({where: {tweetId}})
-
-            if(!like){
-                return res.status(404).json({
-                    success: false,
-                    code: res.statusCode,
-                    message: 'Tweet não encontrado verifique e tente novamente',
-                })
-            }
 
             const isLiked = await repository.like.findFirst({
                 where: {

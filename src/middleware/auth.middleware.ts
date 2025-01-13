@@ -31,17 +31,18 @@ export async function validateToken(req: Request, res: Response, next: NextFunct
             return res.status(401).json({
                 success: false,
                 code: res.statusCode,
-                message: `Estudante não encontrado`
+                message: `Token não autorizado faça login`
             })
         }
 
+        console.log('passei a qui')
         next()
 
     } catch (error) {
         return res.status(500).json({
             success: false,
             code: res.statusCode,
-            message: `Erro ao validar aluno aa ${error}`
+            message: `Erro ao validar aluno ${error}`
         })
     }
 }

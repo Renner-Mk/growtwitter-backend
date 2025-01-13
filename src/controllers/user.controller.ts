@@ -73,38 +73,6 @@ export class UserController{
         try{
             const {name, email, password, username} = req.body
 
-            if(!name || !email || !password || !username){
-                return res.status(400).json({
-                    success: false,
-                    code: res.statusCode,
-                    message: 'Preencha todos os campos obrigatórios'
-                })
-            }
-
-            const userEmail = await repository.user.findUnique({
-                where: {email}
-            })
-    
-            if(userEmail){
-                return res.status(400).json({
-                    success: false,
-                    code: res.statusCode,
-                    message: 'Email ja cadastrado'
-                })
-            }
-
-            const nameUser = await repository.user.findUnique({
-                where: {username}
-            })
-    
-            if(nameUser){
-                return res.status(400).json({
-                    success: false,
-                    code: res.statusCode,
-                    message: 'Username já cadastrado tente outro'
-                })
-            }
-
             const newUser = new User(name, email, password, username)
 
             const createdUser = await repository.user.create({

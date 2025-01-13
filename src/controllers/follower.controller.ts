@@ -6,50 +6,24 @@ export class FollowerController{
     public async follow(req: Request, res: Response){
         try {
             const { userId } = req.params
-            const { username } = req.body
-
-            if(!username){
-                return res.status(400).json({
-                    success: false,
-                    code: res.statusCode,
-                    message: 'Forneça um nome de usuario para seguir',
-                })
-            }
-
-            const follow = await repository.user.findUnique({where: {username}})
-
-            if(!follow){
-                return res.status(404).json({
-                    success: false,
-                    code: res.statusCode,
-                    message: 'Usuário não encontrado verifique e tente novamente',
-                })
-            }
-
-            if(userId === follow.id){
-                return res.status(404).json({
-                    success: false,
-                    code: res.statusCode,
-                    message: 'Usuário não pode seguir a si mesmo',
-                })
-            }
+            const { id: userToFollowId } = req.userToFollow!;
 
             const isFollowing = await repository.follower.findFirst({
                 where: {
                     userId,
-                    followerId: follow.id
+                    followerId: userToFollowId
                 }
             })
-
+    
             if(isFollowing){
                 return res.status(404).json({
                     success: false,
                     code: res.statusCode,
-                    message: 'Usuário não pode seguir um usuario que ja segue',
+                    message: 'Você já está seguindo esse usuário',
                 })
             }
 
-            const newFollow = new Follower(userId, follow?.id)
+            const newFollow = new Follower(userId, userToFollowId)
 
             const createFollower = await repository.follower.create({
                 data:{
@@ -107,30 +81,12 @@ export class FollowerController{
     public async unfollow(req: Request, res: Response){
         try {
             const { userId } = req.params
-            const { username } = req.body
-
-            if(!username){
-                return res.status(400).json({
-                    success: false,
-                    code: res.statusCode,
-                    message: 'Forneça um nome de usuario para seguir',
-                })
-            }
-
-            const follow = await repository.user.findUnique({where: {username}})
-
-            if(!follow){
-                return res.status(404).json({
-                    success: false,
-                    code: res.statusCode,
-                    message: 'Usuário não encontrado verifique e tente novamente',
-                })
-            }
+            const { id: userToFollowId } = req.userToFollow!;
 
             const isFollowing = await repository.follower.findFirst({
                 where: {
                     userId,
-                    followerId: follow.id
+                    followerId: userToFollowId
                 }
             })
 
@@ -146,7 +102,7 @@ export class FollowerController{
                 where: {
                     userId_followerId: {
                         userId: userId,
-                        followerId: follow.id
+                        followerId: userToFollowId
                     }
                 }
             })
@@ -154,7 +110,7 @@ export class FollowerController{
             return res.status(200).json({
                 success: true,
                 code: res.statusCode,
-                message: 'Usuario deixado de seguir com sucesso',
+                message: 'Usuário deixado de seguir com sucesso',
                 data: unfollow
             })
 
@@ -162,7 +118,7 @@ export class FollowerController{
             return res.status(500).json({
                 success: false,
                 code: res.statusCode,
-                message: `Erro ao seguir Usuario ${error}`
+                message: `Erro ao deixar de seguir Usuário ${error}`
             })
         }
     }
