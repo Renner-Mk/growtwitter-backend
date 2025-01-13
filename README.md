@@ -67,4 +67,5 @@ Este projeto é uma API desenvolvida para simular funcionalidades de um Twitter,
 ### Interações
 
 - `POST /user/:userId/like/:tweetId` - Curtir um tweet.
+- `GET /user/:userId/like/:tweetId` - Ver curtidas de um tweet
 - `DELETE /user/:userId/like/:tweetId` - Remover curtida de um tweet.
